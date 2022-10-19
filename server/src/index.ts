@@ -12,7 +12,6 @@ interface Todo {
   isDone: boolean;
 }
 
-// TODO: use a Map
 let todos: Todo[] = [
   {
     id: 0,
@@ -33,14 +32,24 @@ const createTodo = (text: string) => {
   return { ...todo };
 };
 
+const updateTodo = (
+  id: number,
+  { text, isDone }: { text?: string; isDone?: boolean }
+) => {
+  const todo = todos.find((t) => t.id === id);
+  if (!todo) return;
+
+  if (isDone) todo.isDone = isDone;
+  if (text) todo.text = text;
+
+  return { ...todo };
+};
+
 const deleteTodo = (id: number) => {
   if (!todos.some((todo) => todo.id === id)) return false;
   todos = todos.filter((todo) => todo.id !== id);
   return true;
 };
-
-// TODO: Sign up endpoint
-// TODO: Login endpoint
 
 app.post("/todos/create", (req, res) => {
   const body = req.body;
@@ -53,8 +62,15 @@ app.post("/todos/create", (req, res) => {
   const todo = createTodo(body.text);
   res.json(todo);
 });
-// TODO: Update todo endpoint
-// TODO: Delete todo endpoint
+
+app.patch("/todos/update/:id", (req, res) => {
+  const id = +req.params.id;
+  const body = req.body;
+  const todo = updateTodo(id, body);
+
+  res.json(todo);
+});
+
 app.delete("/todos/delete/:id", (req, res) => {
   const id = +req.params.id;
 
