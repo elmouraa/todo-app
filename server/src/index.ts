@@ -67,11 +67,6 @@ app.get("/todos", (_, res) => {
   res.json(todos);
 });
 
-app.get("/hello", (req, res) => {
-  res.send("Hello world");
-});
-
-// TODO: Use env to store PORT
 app.listen(3000, () => {
   console.log("Server running at localhost:3001");
 });
